@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const multer = require('multer');
+const Product= require('./models/products');
 
 const dbConnect = require('./middlewares/dBConnect'); 
 
@@ -10,8 +11,6 @@ const userController = require('./controllers/userController');
 const bookController = require('./controllers/bookController');
 const eventController = require('./controllers/eventController');
 const registrationController = require('./controllers/registrationController');
-
-const Product= require('./models/products');
 
 const path = require('path');
 const app = express();
@@ -23,7 +22,7 @@ app.use(cors());
 dbConnect();
 
 app.use(bodyParser.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static('uploads'));
 
 // Multer setup for image uploads
 const storage = multer.diskStorage({
@@ -91,11 +90,7 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-app.use(express.static('public'));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html')); 
-});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
